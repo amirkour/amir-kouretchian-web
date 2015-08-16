@@ -1,5 +1,23 @@
-.container{
-    width:1000px;
-    margin:auto;
+html{
+    background-color: #f7f7f7;
 }
-
+body{
+    max-width: 1000px;
+    margin: 20px auto 20px auto;
+}
+.container{
+    margin:auto;
+    border: thin solid #cccccc;
+    background-color: white;
+    padding: 10px 20px 10px 20px;
+}
+.banner{
+    text-align:center;
+}
+img{max-width:100%;}
+#mug-shot{
+    width:200px;
+    height:200px;
+    border:thin solid #cccccc;
+    
+}
