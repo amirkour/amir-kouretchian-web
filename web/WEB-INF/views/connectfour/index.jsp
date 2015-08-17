@@ -27,8 +27,8 @@
         <hr/>
         <p>
             Currently, I've implemented 2 agents:
-            <ul style="list-style:disc; padding-left:20px;">
-                <li>a (configurable) depth-limited Minimax Agent</li>
+            <ul class='bulleted-list'>
+                <li>a configurable depth-limited Minimax Agent</li>
                 <li>a dummy/test agent</li>
             </ul>
             <p>
@@ -36,8 +36,39 @@
             battle it out against one-another (which is surprisingly satisfying.)
             </p>
             <p>
-            For information on Minimax, see wikipedia's description <a href="https://en.wikipedia.org/wiki/Minimax">here.</a>
+            For agent implementation details, see my comments below.
             </p>
+        </p>
+        
+        <h3>Agent Details</h3>
+        <hr/>
+        <p>
+            <ul class='bulleted-list'>
+                <li>
+                    <p>
+                        <em>Minimax</em>: this is a depth-limited implementation of a classic
+                        adversarial search algorithm.  Below, you can configure the number of plies
+                        that the game agent will search (where each ply is a move by both players),
+                        along with the utility value of various aspects of the game-state.  There
+                        are also pre-configured agents for convenience: one highly offensive, and one
+                        highly defensive.
+                    </p>
+                    <p>
+                    See the <a href="https://en.wikipedia.org/wiki/Minimax">Wikipedia article</a> for a formal explanation of minimax.
+                    </p>
+                    <p>
+                    My implementation was derived based on Stuart Russell and Peter Norvig's 
+                    description in <a href="http://www.amazon.com/Artificial-Intelligence-Modern-Approach-Edition/dp/0136042597">
+                        Artificial Intelligence, A Modern Approach (3rd Edition)</a>.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>Dummy/test agent</em>: pretty brain-dead - the test agent simply plays a 
+                        piece at the left-most available spot that it can.
+                    </p>
+                </li>
+            </ul>
         </p>
         
         <h3>Configure and Play</h3>

@@ -43,6 +43,10 @@ img{max-width:100%;}
     background-color: #cccccc;
     border-radius: 3px;
 }
+.bulleted-list{
+    list-style: disc;
+    padding-left:20px;
+}
 .body{
     margin-top: 20px;
 }
