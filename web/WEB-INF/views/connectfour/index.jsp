@@ -74,7 +74,15 @@
         <h3>Configure and Play</h3>
         <hr/>
         <p>
-            TODO
+            <c:url var="new_game_url" value="/connectfour/play" />
+            <form:form method="POST" action="${new_game_url}">
+                <input type="hidden" name="boardWidth" value="7" />
+                <input type="hidden" name="boardHeight" value="6" />
+                <input type="hidden" name="numberInRowToWin" value="4" />
+                <input type="hidden" name="playerOneType" value="pc" />
+                <input type="hidden" name="playerTwoType" value="npc-left-to-right-agent" />
+                <input type="submit" value="Play with Defaults" />
+            </form:form>
         </p>
     </div>
 </div>
