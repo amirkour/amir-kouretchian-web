@@ -7,6 +7,7 @@ body{
 }
 hr{ margin: 0; padding: 0; border: 1px solid #d6d6d6; }
 h2, h3{margin: 0; padding: 0;}
+
 /* reset ul margins, in particular for webkit */
 ul{
     margin:0;
@@ -14,6 +15,30 @@ ul{
     list-style: none;
 }
 img{max-width:100%;}
+
+/* alert classes thanks to bootstrap
+   http://getbootstrap.com/components/#alerts */
+.alert{
+    padding:15px;
+    margin-top:10px;
+    margin-bottom:10px;
+    border-radius: 3px;
+}
+.alert-error{
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.alert-success{
+    color: #3c763d;
+    background-color:#dff0d8;
+    border-color:#d6e9c6;
+}
+.alert-info{
+    color:#31708f;
+    background-color:#d9edf7;
+    border-color:#bce8f1;
+}
 .container{
     margin:auto;
     border: thin solid #cccccc;

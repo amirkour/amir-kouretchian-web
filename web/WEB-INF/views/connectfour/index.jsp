@@ -5,6 +5,9 @@
         <a href="<c:url value="/" />">back to homepage</a>
     </div>
     <h2>Connect Four Game Agents</h2>
+    
+    <%@ include file="/WEB-INF/views/flash.jsp" %>
+    
     <div class="body">
         <h3>Project Introduction</h3>
         <hr/>
@@ -14,7 +17,7 @@
             and pursue the next step in my career.
         </p>
         <p>
-            I decided to take a foray into artificial intelligence (at the awesome 
+            I decided to make a foray into artificial intelligence (at the awesome 
             curriculum at <a href="https://www.cs.washington.edu/">the University of Washington's CSE department</a>)
             and (long-story-short) Connect 4 became a forum for me to begin playing
             with implementations of some introductory AI algorithms.  I had also
