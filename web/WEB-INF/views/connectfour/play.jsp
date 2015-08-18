@@ -5,7 +5,7 @@
         <a href="<c:url value="/" />">back to homepage</a>
     </div>
     
-    todo - play a game!?
+    ${boardHtml}
 </div>
     
 <%@ include file="/WEB-INF/views/footer.jsp" %>

@@ -83,3 +83,14 @@ img{max-width:100%;}
     font-weight: bolder;
     font-style: italic;
 }
+.boardSquare{
+    width:30px;
+    height:30px;
+}
+.board{
+    border-collapse:collapse;
+    border:1px solid black;
+}
+.board tr, .board td{
+    border: 1px solid black;
+}
