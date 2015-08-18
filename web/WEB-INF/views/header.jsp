@@ -12,3 +12,4 @@
         <title>Amir Kouretchian</title>
     </head>
     <body>
+        <%@ include file="/WEB-INF/views/flash.jsp" %>

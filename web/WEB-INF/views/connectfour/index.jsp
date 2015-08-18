@@ -6,8 +6,6 @@
     </div>
     <h2>Connect Four Game Agents</h2>
     
-    <%@ include file="/WEB-INF/views/flash.jsp" %>
-    
     <div class="body">
         <h3>Project Introduction</h3>
         <hr/>

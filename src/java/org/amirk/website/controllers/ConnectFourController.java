@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
+import org.amirk.games.connectfour.agents.*;
 
 @Controller
 @RequestMapping(value="/connectfour")
@@ -113,8 +114,99 @@ public class ConnectFourController extends BaseController {
     }
     
     @RequestMapping(method = RequestMethod.POST, value="/play/{gameId}")
-    public String makeMoveForGame(){
-        return "foo";
+    public String makeMoveForGame(@PathVariable("gameId") long gameId,
+                                  @RequestParam("row") int row,
+                                  @RequestParam("col") int col,
+                                  @RequestParam("playerId") long playerId,
+                                  RedirectAttributes flash){
+        
+        String errorRedirectUrl = "/connectfour";
+        
+        Game game = this.daoGame.getById(gameId);
+        if(game == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Could not find game with id " + gameId, flash); }
+        
+        // if the game is already over, just redirect with some feedback
+        if(game.outcomeAlreadyDetermined()){ return this.flashInfoAndRedirect(errorRedirectUrl, "Game " + gameId + " is already finished!  See below for info", flash); }
+        
+        Player thisPlayer = game.getPlayerWithId(playerId);
+        if(thisPlayer == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Player " + playerId + " does not exist for game " + gameId, flash); }
+        
+        ConnectFourGameAgent agent = this.getAgentFor(thisPlayer.getPlayerType(), row, col);
+        if(agent == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to map player " + playerId + " to a game agent", flash); }
+        
+        // delegate to the agent for this player's next move, then apply that move to the game
+        // and then immediately check if any game-end conditions are met.
+        try{
+            GameMove thisPlayersMove = agent.getMoveFor(game, thisPlayer);
+            game.occupySpot(thisPlayer, thisPlayersMove.getRow(), thisPlayersMove.getCol());
+            game.isGameOver();
+        }catch(Exception e){
+            return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to apply this players game move with the following error: " + e.getMessage(), flash);
+        }
+        
+        // if this player's move ended the game, kick the result out
+        if(game.outcomeAlreadyDetermined()){
+            return this.redirect("/connectfour/play/" + gameId);
+        }
+        
+        // now get the next player for this game - depending on what type of player
+        // it is, we have some decisions to make ...
+        Player nextPlayerToMove = this.getOtherPlayer(game, thisPlayer);
+        if(nextPlayerToMove == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to retrieve other player from game " + gameId, flash); }
+        
+        // if the player that just moved is human, and the next player is an AI,
+        // we should calculate the AI's move in response to the human's move, so
+        // that when they next see the game board, they'll see the AIs response
+        // and can continue the game immediately
+        if(!nextPlayerToMove.isConsideredHuman()){
+            agent = this.getAgentFor(nextPlayerToMove.getPlayerType(), row, col);
+            if(agent == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to map next player " + nextPlayerToMove.getId() + " to a game agent", flash); }
+        
+            try{
+                GameMove nextPlayersMove = agent.getMoveFor(game, nextPlayerToMove);
+                game.occupySpot(nextPlayerToMove, nextPlayersMove.getRow(), nextPlayersMove.getCol());
+                game.isGameOver();
+            }catch(Exception e){
+                return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to apply next players game move with the following error: " + e.getMessage(), flash);
+            }
+        }
+        
+        this.daoGame.update(game);
+        return this.redirect("/connectfour/play/" + gameId);
+    }
+    
+    protected Player getOtherPlayer(Game game, Player thisPlayer){
+        if(game == null || thisPlayer == null){ return null; }
+        
+        List<Player> players = game.getPlayers();
+        if(players == null || players.size() != 2){ return null; }
+        
+        for(Player p : players){
+            if(p.getId() != thisPlayer.getId()){ return p; }
+        }
+        
+        return null;
+    }
+    
+    protected ConnectFourGameAgent getAgentFor(PlayerType playerType, int row, int col){
+        if(playerType == null){ return null; }
+        
+        String typeName = playerType.getName();
+        if(StringUtils.isBlank(typeName)){ return null; }
+        
+        ConnectFourGameAgent agent = null;
+        switch(typeName){
+            case "pc":
+                agent = new PassThroughAgent(row, col);
+                break;
+            case "npc-left-to-right-agent":
+                agent = new NPCLeftToRightDummyAgent();
+                break;
+            default:
+                break; // todo - log something here
+        }
+        
+        return agent;
     }
     
     /*
@@ -158,12 +250,13 @@ public class ConnectFourController extends BaseController {
                                                                           .path("/connectfour/play/" + game.getId())
                                                                           .build();
                     
+                    htmlBuilder.append("<div class=\"boardSquare\" >");
                     htmlBuilder.append("<form method=\"POST\" action=\"" + uriBuilder.encode().toString() + "\" >");
                     htmlBuilder.append("<input type=\"hidden\" name=\"row\" value=\"" + i + "\" />");
                     htmlBuilder.append("<input type=\"hidden\" name=\"col\" value=\"" + j + "\" />");
                     htmlBuilder.append("<input type=\"hidden\" name=\"playerId\" value=\"" + nextPlayerToMove.getId() + "\" />");
                     htmlBuilder.append("<input type=\"submit\" value=\"X\" />");
-                    htmlBuilder.append("</form>");
+                    htmlBuilder.append("</form></div>");
                     
                 // otherwise, just render this i,j spot normally. it's either a blank spot,
                 // or occupied by somebody who played here previously
