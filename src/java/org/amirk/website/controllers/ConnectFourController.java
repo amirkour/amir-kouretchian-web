@@ -126,7 +126,7 @@ public class ConnectFourController extends BaseController {
         if(game == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Could not find game with id " + gameId, flash); }
         
         // if the game is already over, just redirect with some feedback
-        if(game.outcomeAlreadyDetermined()){ return this.flashInfoAndRedirect(errorRedirectUrl, "Game " + gameId + " is already finished!  See below for info", flash); }
+        if(game.outcomeAlreadyDetermined()){ return this.flashInfoAndRedirect("/connectfour/play/" + gameId, "Game " + gameId + " is already finished!  See below for info", flash); }
         
         Player thisPlayer = game.getPlayerWithId(playerId);
         if(thisPlayer == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Player " + playerId + " does not exist for game " + gameId, flash); }
@@ -140,14 +140,13 @@ public class ConnectFourController extends BaseController {
             GameMove thisPlayersMove = agent.getMoveFor(game, thisPlayer);
             game.occupySpot(thisPlayer, thisPlayersMove.getRow(), thisPlayersMove.getCol());
             game.isGameOver();
+            this.daoGame.update(game);
         }catch(Exception e){
             return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to apply this players game move with the following error: " + e.getMessage(), flash);
         }
         
         // if this player's move ended the game, kick the result out
-        if(game.outcomeAlreadyDetermined()){
-            return this.redirect("/connectfour/play/" + gameId);
-        }
+        if(game.outcomeAlreadyDetermined()){ return this.redirect("/connectfour/play/" + gameId); }
         
         // now get the next player for this game - depending on what type of player
         // it is, we have some decisions to make ...
@@ -166,12 +165,12 @@ public class ConnectFourController extends BaseController {
                 GameMove nextPlayersMove = agent.getMoveFor(game, nextPlayerToMove);
                 game.occupySpot(nextPlayerToMove, nextPlayersMove.getRow(), nextPlayersMove.getCol());
                 game.isGameOver();
+                this.daoGame.update(game);
             }catch(Exception e){
                 return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to apply next players game move with the following error: " + e.getMessage(), flash);
             }
         }
         
-        this.daoGame.update(game);
         return this.redirect("/connectfour/play/" + gameId);
     }
     
@@ -228,6 +227,10 @@ public class ConnectFourController extends BaseController {
         // is human.)
         SortedSet<GameMove> legalMoves = game.getLegalMoves();
         
+        // then again, if the game is already over, there shouldn't be any
+        // available inputs for the user
+        Boolean gameIsOver = game.outcomeAlreadyDetermined();
+        
         StringBuilder htmlBuilder = new StringBuilder();
         htmlBuilder.append("<table class=\"board\" >");
         
@@ -240,8 +243,9 @@ public class ConnectFourController extends BaseController {
                 
                 // if the next player is human and this i,j spot is a legal move,
                 // give the player a form/button they can use at this spot to make
-                // a move
-                if(nextPlayerToMove != null &&
+                // a move (if the game isn't over!)
+                if(!gameIsOver &&
+                   nextPlayerToMove != null &&
                    nextPlayerToMove.isConsideredHuman() && 
                    legalMoves != null &&
                    legalMoves.contains(new GameMove(i,j))){
