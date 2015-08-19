@@ -7,6 +7,57 @@
     <h2>Connect Four Game Agents</h2>
     
     <div class="body">
+        <h3>Configure and Play</h3>
+        <hr/>
+        <p>
+            <c:url var="new_game_url" value="/connectfour/play" />
+            <form:form method="POST" action="${new_game_url}">
+                <label for="boardWidth">Board Width</label>
+                <select name="boardWidth">
+                    <option value="9">9</option>
+                    <option selected value="7">7</option>
+                    <option value="5">5</option>
+                </select>
+                <br/>
+                
+                <label for="boardHeight">Board Height</label>
+                <select name="boardHeight">
+                    <option value="8">8</option>
+                    <option selected value="6">6</option>
+                    <option value="4">4</option>
+                </select>
+                <br/>
+                
+                <label for="numberInRowToWin">Number-in-a-row to win</label>
+                <select name="numberInRowToWin">
+                    <option value="5">5</option>
+                    <option selected value="4">4</option>
+                    <option value="3">3</option>
+                </select>
+                <br/>
+                
+                <label for="playerOneType">Player One</label>
+                <select name="playerOneType">
+                    <option value="pc" selected>Human</option>
+                    <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
+                    <option value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
+                    <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
+                </select>
+                <br/>
+                
+                <label for="playerTwoType">Player Two</label>
+                <select name="playerTwoType">
+                    <option value="pc">Human</option>
+                    <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
+                    <option selected value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
+                    <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
+                </select>
+                <br/>
+                
+                <input type="submit" value="Play" />
+            </form:form>
+        </p>
+        
         <h3>Project Introduction</h3>
         <hr/>
         <p>
@@ -70,20 +121,6 @@
                     </p>
                 </li>
             </ul>
-        </p>
-        
-        <h3>Configure and Play</h3>
-        <hr/>
-        <p>
-            <c:url var="new_game_url" value="/connectfour/play" />
-            <form:form method="POST" action="${new_game_url}">
-                <input type="hidden" name="boardWidth" value="7" />
-                <input type="hidden" name="boardHeight" value="6" />
-                <input type="hidden" name="numberInRowToWin" value="4" />
-                <input type="hidden" name="playerOneType" value="pc" />
-                <input type="hidden" name="playerTwoType" value="npc-left-to-right-agent" />
-                <input type="submit" value="Play with Defaults" />
-            </form:form>
         </p>
     </div>
 </div>

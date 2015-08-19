@@ -20,10 +20,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.amirk.games.connectfour.agents.*;
+import org.springframework.context.ApplicationContext;
 
 @Controller
 @RequestMapping(value="/connectfour")
 public class ConnectFourController extends BaseController {
+    
+    public final static String MINIMAX_AGENT_OFFENSIVE = "npc-offensive-minimax-agent";
+    public final static String MINIMAX_AGENT_DEFENSIVE = "npc-defensive-minimax-agent";
+    
+    @Autowired
+    protected ApplicationContext appContext;
     
     @Autowired
     protected DAOPlayerType daoPlayerType;
@@ -174,6 +181,10 @@ public class ConnectFourController extends BaseController {
         return this.redirect("/connectfour/play/" + gameId);
     }
     
+    /*
+     * Helper that returns the player not equal to that given by the caller
+     * from the given game, or null if no such player exists.
+     */
     protected Player getOtherPlayer(Game game, Player thisPlayer){
         if(game == null || thisPlayer == null){ return null; }
         
@@ -187,6 +198,10 @@ public class ConnectFourController extends BaseController {
         return null;
     }
     
+    /*
+     * Factory method for returning a connect four game agent given
+     * a player type, and a row/col tuple on the board.
+     */
     protected ConnectFourGameAgent getAgentFor(PlayerType playerType, int row, int col){
         if(playerType == null){ return null; }
         
@@ -201,9 +216,50 @@ public class ConnectFourController extends BaseController {
             case "npc-left-to-right-agent":
                 agent = new NPCLeftToRightDummyAgent();
                 break;
+            case ConnectFourController.MINIMAX_AGENT_DEFENSIVE:
+                agent = this.getDefensiveMinimaxAgent();
+                break;
+            case ConnectFourController.MINIMAX_AGENT_OFFENSIVE:
+                agent = this.getOffensiveMinimaxAgent();
+                break;
+            
             default:
                 break; // todo - log something here
         }
+        
+        return agent;
+    }
+    
+    /*
+     * Helper that constructs/returns an offensive minimax connect four
+     * game agent.
+     */
+    protected ConnectFourGameAgent getOffensiveMinimaxAgent(){
+        NPCConfigurableAgent agent = new NPCConfigurableAgent(
+                50,  // longest sequence coefficient
+                1000, // winning sequence coefficient
+                30,  // adjacent spot coefficient
+                10,  // opponent's longest sequence coefficient
+                3000, // opponent's winning sequence coefficient
+                10,  // opponent's adjacent spot coefficient
+                2);  // depth limit
+        
+        return agent;
+    }
+    
+    /*
+     * Helper that constructs/returns a defensive minimax connect four
+     * game agent.
+     */
+    protected ConnectFourGameAgent getDefensiveMinimaxAgent(){
+        NPCConfigurableAgent agent = new NPCConfigurableAgent(
+                10,  // longest sequence coefficient
+                1000, // winning sequence coefficient
+                10,  // adjacent spot coefficient
+                50,  // opponent's longest sequence coefficient
+                3000, // opponent's winning sequence coefficient
+                40,  // opponent's adjacent spot coefficient
+                2);  // depth limit
         
         return agent;
     }
