@@ -12,52 +12,60 @@
         <p>
             <c:url var="new_game_url" value="/connectfour/play" />
             <form:form method="POST" action="${new_game_url}">
-                <label for="boardWidth">Board Width</label>
-                <select name="boardWidth">
-                    <option value="9">9</option>
-                    <option selected value="7">7</option>
-                    <option value="5">5</option>
-                </select>
-                <br/>
+                <div class="form-group">
+                    <label for="boardWidth" class="form-label">Board Width</label>
+                    <select class="form-component" name="boardWidth">
+                        <option value="9">9</option>
+                        <option selected value="7">7</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
                 
-                <label for="boardHeight">Board Height</label>
-                <select name="boardHeight">
-                    <option value="8">8</option>
-                    <option selected value="6">6</option>
-                    <option value="4">4</option>
-                </select>
-                <br/>
+                <div class="form-group">
+                    <label for="boardHeight" class="form-label">Board Height</label>
+                    <select class="form-component" name="boardHeight">
+                        <option value="8">8</option>
+                        <option selected value="6">6</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
                 
-                <label for="numberInRowToWin">Number-in-a-row to win</label>
-                <select name="numberInRowToWin">
-                    <option value="5">5</option>
-                    <option selected value="4">4</option>
-                    <option value="3">3</option>
-                </select>
-                <br/>
+                <div class="form-group">
+                    <label class="form-label" for="numberInRowToWin">Number-in-a-row to win</label>
+                    <select class="form-component" name="numberInRowToWin">
+                        <option value="5">5</option>
+                        <option selected value="4">4</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
                 
-                <label for="playerOneType">Player One</label>
-                <select name="playerOneType">
-                    <option value="pc" selected>Human</option>
-                    <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
-                    <option value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
-                    <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
-                </select>
-                <br/>
+                <div class="form-group">
+                    <label class="form-label" for="playerOneType">Player One</label>
+                    <select class="form-component" name="playerOneType">
+                        <option value="pc" selected>Human</option>
+                        <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
+                        <option value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
+                        <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
+                    </select>
+                </div>
                 
-                <label for="playerTwoType">Player Two</label>
-                <select name="playerTwoType">
-                    <option value="pc">Human</option>
-                    <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
-                    <option selected value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
-                    <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
-                </select>
-                <br/>
+                <div class="form-group">
+                    <label class="form-label" for="playerTwoType">Player Two</label>
+                    <select class="form-component" name="playerTwoType">
+                        <option value="pc">Human</option>
+                        <option value="npc-left-to-right-agent">AI - dummy/test agent</option>
+                        <option selected value="npc-offensive-minimax-agent">AI - offensive minimax agent</option>
+                        <option value="npc-defensive-minimax-agent">AI - defensive minimax agent</option>
+                    </select>
+                </div>
                 
-                <input type="submit" value="Play" />
+                <div class="form-group">
+                    <input type="submit" value="Play" style="margin-left:21%;" />
+                </div>
             </form:form>
         </p>
         
+        <%--
         <h3>Project Introduction</h3>
         <hr/>
         <p>
@@ -91,7 +99,7 @@
             For agent implementation details, see my comments below.
             </p>
         </p>
-        
+        --%>
         <h3>Agent Details</h3>
         <hr/>
         <p>
@@ -99,10 +107,10 @@
                 <li>
                     <p>
                         <em>Minimax</em>: this is a depth-limited implementation of a classic
-                        adversarial search algorithm.  Below, you can configure the number of plies
-                        that the game agent will search (where each ply is a move by both players),
-                        along with the utility value of various aspects of the game-state.  There
-                        are also pre-configured agents for convenience: one highly offensive, and one
+                        adversarial search algorithm.  At the time of this writing, the agents look-ahead
+                        2 plies in the search tree (where a "ply" here is a move by both players),
+                        and there
+                        are 2 pre-configured agents for convenience: one highly offensive, and one
                         highly defensive.
                     </p>
                     <p>
@@ -116,7 +124,7 @@
                 </li>
                 <li>
                     <p>
-                        <em>Dummy/test agent</em>: pretty brain-dead - the test agent simply plays a 
+                        <em>Dummy/test agent</em>: just a reflex agent that plays a 
                         piece at the left-most available spot that it can.
                     </p>
                 </li>

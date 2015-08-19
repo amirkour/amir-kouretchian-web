@@ -111,6 +111,9 @@ public class ConnectFourController extends BaseController {
         model.addAttribute("boardHtml", boardHtmlString);
         model.addAttribute("nextPlayerToMove", nextPlayerToMove);
         
+        // if one player is human, display some helpful instructions on the page
+        if(!this.allPlayersAreAIFor(game)){ model.addAttribute("showInstructions", true); }
+        
         // if the next player to move is non-null and is not a human, the game
         // should automatically follow-up with the AI's move.  let the view know
         // whether or not that's the case, so we can work some magic to perform
@@ -184,6 +187,10 @@ public class ConnectFourController extends BaseController {
         return this.redirect("/connectfour/play/" + gameId);
     }
     
+    /*
+     * Helper that returns true if all the players in the given game
+     * are AI, false otherwise.
+     */
     protected Boolean allPlayersAreAIFor(Game game){
         if(game == null){ return false; }
         
@@ -326,7 +333,7 @@ public class ConnectFourController extends BaseController {
                                                                           .path("/connectfour/play/" + game.getId())
                                                                           .build();
                     
-                    htmlBuilder.append("<div class=\"boardSquare\" >");
+                    htmlBuilder.append("<div class=\"board-square\" >");
                     htmlBuilder.append("<form method=\"POST\" action=\"" + uriBuilder.encode().toString() + "\" >");
                     htmlBuilder.append("<input type=\"hidden\" name=\"row\" value=\"" + i + "\" />");
                     htmlBuilder.append("<input type=\"hidden\" name=\"col\" value=\"" + j + "\" />");
@@ -340,9 +347,9 @@ public class ConnectFourController extends BaseController {
                 
                     String colorOfThisSpot = game.getColorForPlayerAt(i, j);
                     if(StringUtils.isBlank(colorOfThisSpot)){
-                        htmlBuilder.append("<div class=\"boardSquare\" />");
+                        htmlBuilder.append("<div class=\"board-square\" />");
                     }else{
-                        htmlBuilder.append("<div class=\"boardSquare\" style=\"background-color: " + colorOfThisSpot + ";\" />");
+                        htmlBuilder.append("<div class=\"board-square\" style=\"background-color: " + colorOfThisSpot + ";\" />");
                     }
                 }
                 
