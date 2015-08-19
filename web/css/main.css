@@ -94,3 +94,4 @@ img{max-width:100%;}
 .board tr, .board td{
     border: 1px solid black;
 }
+.hidden{ display:none; }

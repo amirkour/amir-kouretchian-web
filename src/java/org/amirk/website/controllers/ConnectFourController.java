@@ -163,8 +163,11 @@ public class ConnectFourController extends BaseController {
         // if the player that just moved is human, and the next player is an AI,
         // we should calculate the AI's move in response to the human's move, so
         // that when they next see the game board, they'll see the AIs response
-        // and can continue the game immediately
-        if(!nextPlayerToMove.isConsideredHuman()){
+        // and can continue the game immediately.
+        //
+        // there's one exception: if the next player is AI, but 
+        if(!nextPlayerToMove.isConsideredHuman() &&
+           thisPlayer.isConsideredHuman()){
             agent = this.getAgentFor(nextPlayerToMove.getPlayerType(), row, col);
             if(agent == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Failed to map next player " + nextPlayerToMove.getId() + " to a game agent", flash); }
         
@@ -179,6 +182,19 @@ public class ConnectFourController extends BaseController {
         }
         
         return this.redirect("/connectfour/play/" + gameId);
+    }
+    
+    protected Boolean allPlayersAreAIFor(Game game){
+        if(game == null){ return false; }
+        
+        List<Player> players = game.getPlayers();
+        if(players == null){ return false; }
+        
+        for(Player p : players){
+            if(p.isConsideredHuman()){ return false; }
+        }
+        
+        return true;
     }
     
     /*
@@ -236,7 +252,7 @@ public class ConnectFourController extends BaseController {
      */
     protected ConnectFourGameAgent getOffensiveMinimaxAgent(){
         NPCConfigurableAgent agent = new NPCConfigurableAgent(
-                50,  // longest sequence coefficient
+                100,  // longest sequence coefficient
                 1000, // winning sequence coefficient
                 30,  // adjacent spot coefficient
                 10,  // opponent's longest sequence coefficient
