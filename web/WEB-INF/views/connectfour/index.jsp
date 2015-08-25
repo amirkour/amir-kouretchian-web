@@ -129,7 +129,10 @@
                     </p>
                 </li>
             </ul>
+        
+            You can also view the latest code on <a href="https://github.com/amirkour/connect-four">the github repo</a>.
         </p>
+        
     </div>
 </div>
     
