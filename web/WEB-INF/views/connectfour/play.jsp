@@ -7,7 +7,15 @@
     </div>
     
     <c:if test="${game.outcomeAlreadyDetermined()}">
-        <div class="alert alert-info">${game.outcomeDescription}</div>
+        <c:url var="repeat_game_url" value="/connectfour/play/${game.id}/repeat" />
+        
+        <div class="alert alert-info">
+            ${game.outcomeDescription}
+            
+            <form:form method="POST" action="${repeat_game_url}" style="margin-top:10px;">
+                <input type="submit" value="Play Again!" />
+            </form:form>
+        </div>
     </c:if>
     
     ${boardHtml}

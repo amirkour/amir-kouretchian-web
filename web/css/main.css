@@ -23,6 +23,7 @@ img{max-width:100%;}
     margin-top:10px;
     margin-bottom:10px;
     border-radius: 3px;
+    text-align:center;
 }
 .alert-error{
     color: #a94442;
