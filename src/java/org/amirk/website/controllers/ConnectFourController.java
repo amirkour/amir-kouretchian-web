@@ -187,6 +187,41 @@ public class ConnectFourController extends BaseController {
         return this.redirect("/connectfour/play/" + gameId);
     }
     
+    @RequestMapping(method = RequestMethod.POST, value="/play/{gameId}/repeat")
+    public String playAgain(@PathVariable("gameId") long gameId,
+                            RedirectAttributes flash){
+        
+        String errorRedirectUrl = "/connectfour";
+        
+        Game gameToRepeat = this.daoGame.getById(gameId);
+        if(gameToRepeat == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Cannot repeat non-existing game " + gameId, flash); }
+        
+        List<Player> oldPlayers = gameToRepeat.getPlayers();
+        if(oldPlayers == null || oldPlayers.size() != 2){ return this.flashErrorAndRedirect(errorRedirectUrl, "Game " + gameId + " cannot be repeated - it doesn't have exactly 2 players!", flash); }
+        
+        long[][] oldBoard = gameToRepeat.getBoardMatrix();
+        if(oldBoard == null){ return this.flashErrorAndRedirect(errorRedirectUrl, "Cannot repeat game " + gameId + " - there was no board to duplicate!", flash); }
+        if(oldBoard.length <= 0 || oldBoard[0].length <= 0){ return this.flashErrorAndRedirect(errorRedirectUrl, "Cannot repeat game " + gameId + " - the board has invalid dimensions!", flash); }
+        
+        List<Player> newPlayers = new ArrayList<Player>();
+        for(Player oldPlayer : oldPlayers){
+            Player newPlayer = new Player();
+            newPlayer.setPlayerColor(oldPlayer.getPlayerColor());
+            newPlayer.setPlayerType(oldPlayer.getPlayerType());
+            newPlayer.setUser(oldPlayer.getUser());
+            this.daoPlayer.save(newPlayer);
+            newPlayers.add(newPlayer);
+        }
+        
+        Game newGame = new Game();
+        newGame.setPlayers(newPlayers);
+        newGame.setNumberInRowToWin(gameToRepeat.getNumberInRowToWin());
+        newGame.setBoardMatrix( new long[oldBoard.length][oldBoard[0].length] );
+        this.daoGame.save(newGame);
+        
+        return this.redirect("/connectfour/play/ " + newGame.getId());
+    }
+    
     /*
      * Helper that returns true if all the players in the given game
      * are AI, false otherwise.
