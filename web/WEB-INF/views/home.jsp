@@ -37,7 +37,7 @@
             <li>
                 <p>
                 <span class="project-title">Connect-Four Game Agents</span>
-                    I used the classic Hasbro (previously Milton Brothers) game <a href="http://www.hasbro.com/en-us/toys-games/hasbro-games:connect-4">connect 4</a>
+                    I used the classic Hasbro (previously Milton Bradley) game <a href="http://www.hasbro.com/en-us/toys-games/hasbro-games:connect-4">connect 4</a>
                     as a forum to begin playing with some of the AI algorithms I've been learning (as well as a way to get back into Java.)
                 </p>
                 <ul class="links">
