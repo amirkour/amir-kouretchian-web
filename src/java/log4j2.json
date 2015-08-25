@@ -1,0 +1,30 @@
+{
+    "configuration": {
+        "appenders": {
+            "appender": [
+                {
+                    "type": "Console", 
+                    "name": "STDOUT", 
+                    "PatternLayout": { "pattern": "%d [%-5p] %C{1}.%M: %m%n" }
+                },
+                {
+                    "type": "RollingFile",
+                    "name": "RollingFile",
+                    "fileName": "logs/app.log",
+                    "PatternLayout": { "pattern": "%d [%-5p] %C{1}.%M: %m%n" },
+                    "Policies":{ "SizeBasedTriggeringPolicy": { "size": "5MB" } },
+                    "DefaultRolloverStrategy": { "max": "5" },
+                    "filePattern": "logs/app-%d{yyyy-MM-dd-HH}-%i.log.gz"
+                }
+            ]
+        },
+        "loggers": {
+            "root": {
+                "level": "info",
+                "AppenderRef": {
+                    "ref": "RollingFile"
+                }
+            }
+        }
+    }
+}
