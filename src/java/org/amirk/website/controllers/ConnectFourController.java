@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.amirk.games.connectfour.agents.*;
+import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 @Controller
@@ -28,6 +29,9 @@ public class ConnectFourController extends BaseController {
     
     public final static String MINIMAX_AGENT_OFFENSIVE = "npc-offensive-minimax-agent";
     public final static String MINIMAX_AGENT_DEFENSIVE = "npc-defensive-minimax-agent";
+    
+    @Autowired
+    protected Logger logger;
     
     @Autowired
     protected ApplicationContext appContext;
@@ -48,7 +52,10 @@ public class ConnectFourController extends BaseController {
     protected DAOGame daoGame;
     
     @RequestMapping(method = RequestMethod.GET)
-    public String index(){ return "connectfour/index"; }
+    public String index(){
+        logger.info("connect four index");
+        return "connectfour/index";
+    }
     
     @RequestMapping(method=RequestMethod.POST, value="/play")
     public String playNewGame(@RequestParam("boardWidth") int boardWidth,
