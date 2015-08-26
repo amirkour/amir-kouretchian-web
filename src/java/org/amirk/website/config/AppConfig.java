@@ -33,9 +33,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class AppConfig {
     
     @Bean
+    @Profile("dev")
+    public Logger devLogger(){
+        return LoggerFactory.getLogger("dev");
+    }
+    
+    @Bean
     @Profile("default")
     public Logger defaultLogger(){
-        return LoggerFactory.getLogger(AppConfig.class);
+        return LoggerFactory.getLogger("root");
     }
     
     @Bean

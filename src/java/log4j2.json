@@ -19,8 +19,26 @@
             ]
         },
         "loggers": {
+            "logger": [
+                {
+                    "name": "dev",
+                    "level": "info",
+                    "additivity": "false",
+                    "AppenderRef": {
+                        "ref": "RollingFile"
+                    }
+                },
+                {
+                    "name": "dev-verbose",
+                    "level": "trace",
+                    "additivity": "false",
+                    "AppenderRef": {
+                        "ref": "RollingFile"
+                    }
+                }
+            ],
             "root": {
-                "level": "info",
+                "level": "error",
                 "AppenderRef": {
                     "ref": "RollingFile"
                 }

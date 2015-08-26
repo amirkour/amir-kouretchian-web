@@ -54,6 +54,7 @@ public class ConnectFourController extends BaseController {
     @RequestMapping(method = RequestMethod.GET)
     public String index(){
         logger.info("connect four index");
+        logger.error("connect four index error");
         return "connectfour/index";
     }
     
